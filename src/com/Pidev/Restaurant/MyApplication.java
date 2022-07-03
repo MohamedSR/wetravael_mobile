@@ -1,7 +1,9 @@
 package com.Pidev.Restaurant;
 
 import com.Pidev.Restaurant.Entities.Restaurant;
+import com.Pidev.Restaurant.Entities.User;
 import com.Pidev.Restaurant.Services.RestaurantService;
+import com.Pidev.Restaurant.Services.UserService;
 import com.Pidev.Restaurant.Utils.Strings;
 import com.codename1.components.ImageViewer;
 import static com.codename1.ui.CN.*;
@@ -29,26 +31,23 @@ import java.util.ArrayList;
  * One</a> for the purpose of building native mobile applications using Java.
  */
 public class MyApplication {
-
     private Form current;
     private Resources theme;
     private String filePath;
     ArrayList<Restaurant> restos = new ArrayList<>();
-
+    ArrayList<User> users = new ArrayList<>();
     public void init(Object context) {
         // use two network threads instead of one
         updateNetworkThreadCount(2);
-
         theme = UIManager.initFirstTheme("/theme");
-
         // Enable Toolbar on all Forms by default
         Toolbar.setGlobalToolbar(true);
-
         // Pro only feature
         Log.bindCrashProtection(true);
         RestaurantService rs = RestaurantService.getInstance();
+        UserService us = UserService.getInstance();
         restos = rs.getAllRestaurants();
-
+        users = us.getAllUsers();
         addNetworkErrorListener(err -> {
             // prevent the event from propagating
             err.consume();
@@ -66,7 +65,6 @@ public class MyApplication {
             return;
         }
         Form hi = new Form("Restaurants", BoxLayout.y());
-
         Button btnAdd = new Button("Ajouter restaurant");
         btnAdd.addActionListener(e -> {
             Form addPage = new Form("Ajouter Restaurant", BoxLayout.y());
@@ -107,7 +105,7 @@ public class MyApplication {
                     } catch (Exception e) {
                         Dialog.show("Error", "Error");
                     }
-                    Dialog.show("Info", "Utilisateur ajouté avec succéss");
+                    Dialog.show("Info", "Restaurant ajouté avec succéss");
                 }
             });
             addPage.addAll(name, nameInp, adresse, adrInp, ville, villeInp, pays, paysInp, capacity, capacityInp, uploadImg, addBtn);
@@ -121,9 +119,69 @@ public class MyApplication {
                 System.out.println(ex.getMessage());
             }
         }
+        Button user = new Button("Show Users");
+        user.addActionListener(actionEvent -> {
+            Form UserList = new Form("User List",BoxLayout.y());
+            for (User u : users) {
+                try {
+                    UserList.add(addItem(u));
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+            Button plusUser = new Button("Ajouter User");
+            plusUser.addActionListener(actionEvent1 -> {
+                Form plusPage = new Form("Ajouter User", BoxLayout.y());
+
+                Label name = new Label("Nom");
+                TextField nameInp = new TextField();
+
+                Label email = new Label("Email");
+                TextField mailInp = new TextField();
+
+                Label password = new Label("Password");
+                TextField passwordInp = new TextField();
+
+                Label phone = new Label("Phone");
+                TextField phoneInp = new TextField();
+
+                Label role = new Label("Role");
+                TextField roleInp = new TextField();
+
+                Button uploadImg = new Button("Selectionner une Image");
+                uploadImg.addActionListener(e3 -> {
+                    Display.getInstance().openGallery(new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            if (evt != null && evt.getSource() != null) {
+                                filePath = (String) evt.getSource();
+                            }
+                        }
+                    }, GALLERY_IMAGE);
+                });
+                Button plus = new Button("Ajouter");
+                plus.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e2) {
+                        try {
+                            UserService us = UserService.getInstance();
+                            User u = new User(nameInp.getText(), roleInp.getText(), mailInp.getText(), passwordInp.getText(), phoneInp.getText(), Strings.removePrefix(filePath,"file://"));
+                            us.addUser(u);
+                        } catch (Exception e) {
+                            Dialog.show("Error", "Error");
+                        }
+                        Dialog.show("Info", "Utilisateur ajouté avec succéss");
+                    }
+                });
+                plusPage.addAll(name, nameInp, email, mailInp, password, passwordInp, phone, phoneInp
+                        , role, roleInp, uploadImg, plus);
+                plusPage.show();
+            });
+            UserList.add(plusUser);
+            UserList.show();
+        });
+        hi.add(user);
         hi.show();
     }
-
     public Container addItem(Restaurant r) throws IOException {
         Container c1 = new Container(BoxLayout.x());
         String link = "file://" + r.getImage();
@@ -136,7 +194,18 @@ public class MyApplication {
         c2.addAll(c1);
         return c2;
     }
+    public Container addItem(User u) throws IOException {
+        Container c1 = new Container(BoxLayout.x());
+        String link = "file://" + u.getImage();
+        ImageViewer img = new ImageViewer(Image.createImage(link));
+        img.setSize(new Dimension(10, 10));
+        Label lb = new Label(u.getName() + " " + u.getEmail()+" " + u.getPhone());
 
+        c1.addAll(img, lb);
+        Container c2 = new Container(BoxLayout.y());
+        c2.addAll(c1);
+        return c2;
+    }
     public void stop() {
         current = getCurrentForm();
         if (current instanceof Dialog) {
@@ -144,7 +213,6 @@ public class MyApplication {
             current = getCurrentForm();
         }
     }
-
     public void destroy() {
     }
 
