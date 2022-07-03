@@ -40,7 +40,7 @@ public class RestaurantService {
     }
 
     public boolean addRestaurant(Restaurant r) {
-        String url = BASE_URL;
+        String url = BASE_URL+"/create";
         req.setUrl(url);
         req.setPost(true);
         req.addRequestHeader("Content-Type", "application/json");
@@ -115,7 +115,7 @@ public class RestaurantService {
 
     public ArrayList<Restaurant> getAllRestaurants() {
         req = new ConnectionRequest();
-        String url = BASE_URL;
+        String url = BASE_URL+"/listrestaurants";
         req.setUrl(url);
         req.setPost(false);
         req.addResponseListener(e -> {

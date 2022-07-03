@@ -155,7 +155,7 @@ public class User {
     }
 
     public String toJSON(){
-        return "{\"name\":\""+this.name+"\",\"role\":"+this.role+",\"email\":\""+this.email+"\",\"password\":\""+this.password+
+        return "{\"name\":\""+this.name+"\",\"role\":\""+this.role+"\",\"email\":\""+this.email+"\",\"password\":\""+this.password+
                 "\",\"phone\":\""+this.phone+"\",\"image\":\""+this.image+"\"}";
     }
 }

@@ -30,11 +30,28 @@ public class UserService {
     }
 
     public boolean addUser(User u) {
-        String url = BASE_URL;
+        String url = BASE_URL+"/create";
         req.setUrl(url);
         req.setPost(true);
         req.addRequestHeader("Content-Type", "application/json");
         req.setRequestBody(u.toJSON());
+//        req.addArgument("name",u.getName());
+//
+//        req.addArgument("password",u.getPassword());
+//        req.addResponseListener(res->{
+//            String rp = new String(req.getResponseData());
+//            System.out.println(rp);
+//            if(rp.equals("ok")){
+//                response.setText("Welcome");
+//                f1.show();
+//            }else {
+//                dg.show("Error","Invalid","ok",null);
+//                dg.show();
+//            }
+//        });
+//        NetworkManager.getInstance().addToQueueAndWait(cnx);
+//
+//    });
         req.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -56,7 +73,7 @@ public class UserService {
             List<Map<String, Object>> list = (List<Map<String, Object>>) usersListJson.get("root");
             for (Map<String, Object> obj : list) {
                 User u = new User();
-                int id = Integer.parseInt(obj.get("id").toString());
+                float id = Float.parseFloat(obj.get("id").toString());
                 u.setId((int) id);
                 if (obj.get("name") == null) {
                     u.setName("null");
@@ -81,7 +98,7 @@ public class UserService {
                 if (obj.get("password") == null) {
                     u.setPassword("null");
                 } else {
-                    u.setPassword(obj.get("pays").toString());
+                    u.setPassword(obj.get("password").toString());
                 }
                 if(obj.get("phone") == null){
                     u.setPhone("null");
@@ -103,7 +120,7 @@ public class UserService {
 
     public ArrayList<User> getAllUsers() {
         req = new ConnectionRequest();
-        String url = BASE_URL;
+        String url = BASE_URL+"/listUsers";
         req.setUrl(url);
         req.setPost(false);
         req.addResponseListener(e -> {
