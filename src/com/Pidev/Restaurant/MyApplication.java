@@ -7,6 +7,7 @@ import com.Pidev.Restaurant.Services.UserService;
 import com.Pidev.Restaurant.Utils.Strings;
 import com.codename1.components.ImageViewer;
 import static com.codename1.ui.CN.*;
+import com.codename1.io.File;
 import com.codename1.ui.Form;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Label;
@@ -66,6 +67,7 @@ public class MyApplication {
         }
         Form hi = new Form("Restaurants", BoxLayout.y());
         Button btnAdd = new Button("Ajouter restaurant");
+        Button user = new Button("Show Users");
         btnAdd.addActionListener(e -> {
             Form addPage = new Form("Ajouter Restaurant", BoxLayout.y());
 
@@ -111,6 +113,7 @@ public class MyApplication {
             addPage.addAll(name, nameInp, adresse, adrInp, ville, villeInp, pays, paysInp, capacity, capacityInp, uploadImg, addBtn);
             addPage.show();
         });
+        hi.add(user);
         hi.add(btnAdd);
         for (Restaurant resto : restos) {
             try {
@@ -119,9 +122,11 @@ public class MyApplication {
                 System.out.println(ex.getMessage());
             }
         }
-        Button user = new Button("Show Users");
+
         user.addActionListener(actionEvent -> {
             Form UserList = new Form("User List",BoxLayout.y());
+            Button plusUser = new Button("Ajouter User");
+            UserList.add(plusUser);
             for (User u : users) {
                 try {
                     UserList.add(addItem(u));
@@ -129,7 +134,6 @@ public class MyApplication {
                     System.out.println(ex.getMessage());
                 }
             }
-            Button plusUser = new Button("Ajouter User");
             plusUser.addActionListener(actionEvent1 -> {
                 Form plusPage = new Form("Ajouter User", BoxLayout.y());
 
@@ -167,19 +171,18 @@ public class MyApplication {
                             User u = new User(nameInp.getText(), roleInp.getText(), mailInp.getText(), passwordInp.getText(), phoneInp.getText(), Strings.removePrefix(filePath,"file://"));
                             us.addUser(u);
                         } catch (Exception e) {
-                            Dialog.show("Error", "Error");
+                            System.out.println(e.toString());
+                            Dialog.show("Error", "Error","ok",null);
                         }
-                        Dialog.show("Info", "Utilisateur ajouté avec succéss");
+                        Dialog.show("Info", "Utilisateur ajouté avec succéss","ok",null);
                     }
                 });
                 plusPage.addAll(name, nameInp, email, mailInp, password, passwordInp, phone, phoneInp
                         , role, roleInp, uploadImg, plus);
                 plusPage.show();
             });
-            UserList.add(plusUser);
             UserList.show();
         });
-        hi.add(user);
         hi.show();
     }
     public Container addItem(Restaurant r) throws IOException {

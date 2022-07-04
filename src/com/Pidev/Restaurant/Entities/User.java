@@ -15,7 +15,6 @@ public class User {
         hash = 13 * hash + Objects.hashCode(this.phone);
         return hash;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -45,13 +44,10 @@ public class User {
         }
         return Objects.equals(this.phone, other.phone);
     }
-
     private int id;
     private String name, role, email, password, phone, image;
-
     public User() {
     }
-
     public User(String name, String role, String email, String password, String phone, String image) {
         this.name = name;
         this.role = role;
@@ -84,63 +80,48 @@ public class User {
         this.phone = phone;
         this.image = image;
     }
-
     public String getPhone() {
         return phone;
     }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public String getRole() {
         return role;
     }
-
     public void setRole(String role) {
         this.role = role;
     }
-
     public String getEmail() {
         return email;
     }
-
     public String getImage() {
         return image;
     }
-
     public void setImage(String image) {
         this.image = image;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
-
     @Override
     public String toString() {
         return "User{" +
@@ -153,7 +134,6 @@ public class User {
                 ",image='"+image +'\''+
                 '}';
     }
-
     public String toJSON(){
         return "{\"name\":\""+this.name+"\",\"role\":\""+this.role+"\",\"email\":\""+this.email+"\",\"password\":\""+this.password+
                 "\",\"phone\":\""+this.phone+"\",\"image\":\""+this.image+"\"}";
