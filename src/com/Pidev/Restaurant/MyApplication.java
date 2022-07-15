@@ -169,12 +169,14 @@ public class MyApplication {
                         try {
                             UserService us = UserService.getInstance();
                             User u = new User(nameInp.getText(), roleInp.getText(), mailInp.getText(), passwordInp.getText(), phoneInp.getText(), Strings.removePrefix(filePath,"file://"));
-                            us.addUser(u);
+                            boolean res = us.addUser(u);
+                            if(res)
+                            Dialog.show("Info", "Utilisateur ajouté avec succéss","ok",null);
+                            else Dialog.show("Error", "Error","ok",null);
                         } catch (Exception e) {
                             System.out.println(e.toString());
-                            Dialog.show("Error", "Error","ok",null);
                         }
-                        Dialog.show("Info", "Utilisateur ajouté avec succéss","ok",null);
+
                     }
                 });
                 plusPage.addAll(name, nameInp, email, mailInp, password, passwordInp, phone, phoneInp

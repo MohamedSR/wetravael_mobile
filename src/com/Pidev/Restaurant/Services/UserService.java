@@ -2,6 +2,7 @@ package com.Pidev.Restaurant.Services;
 
 import com.Pidev.Restaurant.Entities.User;
 import com.codename1.io.*;
+import com.codename1.ui.events.ActionListener;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class UserService {
         return instance;
     }
 
-    public List<Map<String, Object>> addUser(User u) throws IOException {
+    public Boolean addUser(User u) throws IOException {
         String url = BASE_URL+"/create";
         req.setUrl(url);
         req.setPost(false);
@@ -39,10 +40,16 @@ public class UserService {
         req.addArgument("password",u.getPassword());
         req.addArgument("role",u.getRole());
         req.addArgument("image",u.getImage());
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                resultOK = req.getResponseCode() == 200; //Code HTTP 200 OK
+                System.out.println(req.getResponseErrorMessage());
+                req.removeResponseListener(this);
+            }
+        });
         NetworkManager.getInstance().addToQueueAndWait(req);
-        Map<String,Object> result = new JSONParser().parseJSON(new InputStreamReader( new ByteArrayInputStream(req.getResponseData()),"UTF-8"));
-        Map<String, Object> response =(Map<String, Object>) result.get("response");
-        return (java.util.List<Map<String, Object>>)response.get("listings");
+        return resultOK;
     }
     public ArrayList<User> parseUser(String jsonText) {
         try {
