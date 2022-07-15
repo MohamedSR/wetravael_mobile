@@ -47,8 +47,8 @@ public class MyApplication {
 
         // Pro only feature
         Log.bindCrashProtection(true);
-        RestaurantService rs = RestaurantService.getInstance();
-        restos = rs.getAllRestaurants();
+        //RestaurantService rs = RestaurantService.getInstance();
+        //restos = rs.getAllRestaurants();
 
         addNetworkErrorListener(err -> {
             // prevent the event from propagating

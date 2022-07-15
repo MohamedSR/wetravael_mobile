@@ -16,11 +16,8 @@ public class UserService {
     public static final String BASE_URL = "http://localhost:4443/api/v1/users";
     public static UserService instance;
     public boolean resultOK;
-    private ConnectionRequest req;
 
-    public UserService() {
-        req = new ConnectionRequest();
-    }
+    public UserService() {}
 
     public static UserService getInstance() {
         if (instance == null) {
@@ -30,6 +27,7 @@ public class UserService {
     }
 
     public boolean addUser(User u) {
+        ConnectionRequest req = new ConnectionRequest();
         String url = BASE_URL;
         req.setUrl(url);
         req.setPost(true);
@@ -39,7 +37,6 @@ public class UserService {
             @Override
             public void actionPerformed(NetworkEvent evt) {
                 resultOK = req.getResponseCode() == 200; //Code HTTP 200 OK
-                System.out.println(req.getResponseErrorMessage());
                 req.removeResponseListener(this);
             }
         });
@@ -56,13 +53,8 @@ public class UserService {
             List<Map<String, Object>> list = (List<Map<String, Object>>) usersListJson.get("root");
             for (Map<String, Object> obj : list) {
                 User u = new User();
-                int id = Integer.parseInt(obj.get("id").toString());
+                float id = Float.parseFloat(obj.get("id").toString());
                 u.setId((int) id);
-                if (obj.get("name") == null) {
-                    u.setName("null");
-                } else {
-                    u.setName(obj.get("name").toString());
-                }
                 if (obj.get("name") == null) {
                     u.setName("null");
                 } else {
@@ -81,7 +73,7 @@ public class UserService {
                 if (obj.get("password") == null) {
                     u.setPassword("null");
                 } else {
-                    u.setPassword(obj.get("pays").toString());
+                    u.setPassword(obj.get("password").toString());
                 }
                 if(obj.get("phone") == null){
                     u.setPhone("null");
@@ -102,7 +94,7 @@ public class UserService {
     }
 
     public ArrayList<User> getAllUsers() {
-        req = new ConnectionRequest();
+        ConnectionRequest req = new ConnectionRequest();
         String url = BASE_URL;
         req.setUrl(url);
         req.setPost(false);
