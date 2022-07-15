@@ -65,9 +65,10 @@ public class AddRestaurantForm extends Form {
                     Restaurant r = new Restaurant(Integer.parseInt(capacityInp.getText()), nameInp.getText(), adrInp.getText(), villeInp.getText(), paysInp.getText(), Strings.removePrefix(filePath, "file://"));
                     rs.addRestaurant(r);
                 } catch (Exception e) {
-                    Dialog.show("Error", "Error");
+                    Dialog.show("Error", e.getMessage(), "OK", null);
                 }
-                // Dialog.show("Info", "Utilisateur ajouté avec succéss");
+                
+                    Dialog.show("Info", "Restaurant ajouté avec succéss", "OK", null);
             }
         });
         addAll(name, nameInp, adresse, adrInp, ville, villeInp, pays, paysInp, capacity, capacityInp, uploadImg, addBtn);

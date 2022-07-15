@@ -26,11 +26,8 @@ public class RestaurantService {
     public static final String BASE_URL = "http://localhost:4443/api/v1/restaurants";
     public static RestaurantService instance;
     public boolean resultOK;
-    private ConnectionRequest req;
 
-    public RestaurantService() {
-        req = new ConnectionRequest();
-    }
+    public RestaurantService() {}
 
     public static RestaurantService getInstance() {
         if (instance == null) {
@@ -40,6 +37,7 @@ public class RestaurantService {
     }
 
     public boolean addRestaurant(Restaurant r) {
+        ConnectionRequest req = new ConnectionRequest();
         String url = BASE_URL;
         req.setUrl(url);
         req.setPost(true);
@@ -49,7 +47,6 @@ public class RestaurantService {
             @Override
             public void actionPerformed(NetworkEvent evt) {
                 resultOK = req.getResponseCode() == 200; //Code HTTP 200 OK
-                System.out.println(req.getResponseErrorMessage());
                 req.removeResponseListener(this);
             }
         });
@@ -114,7 +111,7 @@ public class RestaurantService {
     }
 
     public ArrayList<Restaurant> getAllRestaurants() {
-        req = new ConnectionRequest();
+        ConnectionRequest req = new ConnectionRequest();
         String url = BASE_URL;
         req.setUrl(url);
         req.setPost(false);
