@@ -1,11 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.Pidev.GUI.Restaurant;
+package com.Pidev.GUI.Event;
 
-import com.Pidev.Restaurant.Entities.Restaurant;
-import com.Pidev.Restaurant.Services.RestaurantService;
+import com.Pidev.GUI.Event.AddEventForm;
+import com.Pidev.Restaurant.Entities.Event;
+import com.Pidev.Restaurant.Services.EventService;
 import com.codename1.components.ImageViewer;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
@@ -22,34 +19,35 @@ import java.util.ArrayList;
  *
  * @author m.rhouma
  */
-public class ListRestaurantForm  extends Form {
-    
-    ArrayList<Restaurant> restos = new ArrayList<>();
+public class ListEventForm  extends Form {
+
+    ArrayList<Event> events = new ArrayList<>();
     Form current;
 
-    public ListRestaurantForm(Form previous) {
-        current=this; //Back 
-        setTitle("List restaurants");
+    public ListEventForm(Form previous) {
+        current=this; //Back
+        setTitle("List evenements");
         setLayout(BoxLayout.y());
-        
-        Button btnAddResto = new Button("Ajouter restaurant");
-        btnAddResto.addActionListener(e-> new AddRestaurantForm(current).show());
+
+        Button btnAddResto = new Button("Ajouter evenement");
+        btnAddResto.addActionListener(e-> new AddEventForm(current).show());
         add(btnAddResto);
-        
-        RestaurantService srv = RestaurantService.getInstance();
-        restos = srv.getAllRestaurants();
-        for (Restaurant resto : restos) {
+
+        EventService srv = EventService.getInstance();
+        events = srv.getAllEvents();
+        for (Event event : events) {
             try {
-                add(addItem(resto));
+                add(addItem(event));
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }
         }
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e-> previous.showBack());
     }
-    
-    public Container addItem(Restaurant r) throws IOException {
+
+    public Container addItem(Event r) throws IOException {
         Container c1 = new Container(BoxLayout.x());
+        //String link = "file://" + "C:/Users/Mouhib/Downloads/ibiza.jpg";
         String link = "file://" + r.getImage();
         ImageViewer img = new ImageViewer(Image.createImage(link));
         //img.setSize(new Dimension(10, 10));
@@ -62,5 +60,5 @@ public class ListRestaurantForm  extends Form {
         c2.addAll(c1);
         return c2;
     }
-    
+
 }

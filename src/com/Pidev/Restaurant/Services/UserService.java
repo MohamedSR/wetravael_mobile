@@ -13,7 +13,7 @@ import java.util.Map;
 public class UserService {
 
     public ArrayList<User> users;
-    public static final String BASE_URL = "http://localhost:4443/api/v1/users";
+    public static final String BASE_URL = "http://localhost:3000/api/v1/users";
     public static UserService instance;
     public boolean resultOK;
     private ConnectionRequest req;

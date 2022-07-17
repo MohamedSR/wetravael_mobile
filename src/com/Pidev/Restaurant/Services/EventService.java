@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.Pidev.Restaurant.Services;
 
-import com.Pidev.Restaurant.Entities.Restaurant;
+import com.Pidev.Restaurant.Entities.Event;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
@@ -20,23 +16,23 @@ import java.util.Map;
  *
  * @author m.rhouma
  */
-public class RestaurantService {
+public class EventService {
 
-    public ArrayList<Restaurant> restos;
-    public static final String BASE_URL = "http://localhost:3000/api/v1/restaurants/";
-    public static RestaurantService instance;
+    public ArrayList<Event> events;
+    public static final String BASE_URL = "http://localhost:3000/api/v1/events";
+    public static EventService instance;
     public boolean resultOK;
 
-    public RestaurantService() {}
+    public EventService() {}
 
-    public static RestaurantService getInstance() {
+    public static EventService getInstance() {
         if (instance == null) {
-            instance = new RestaurantService();
+            instance = new EventService();
         }
         return instance;
     }
 
-    public boolean addRestaurant(Restaurant r) {
+    public boolean addEvent(Event r) {
         ConnectionRequest req = new ConnectionRequest();
         String url = BASE_URL;
         req.setUrl(url);
@@ -54,16 +50,16 @@ public class RestaurantService {
         return resultOK;
     }
 
-    public ArrayList<Restaurant> parseRestaurant(String jsonText) {
+    public ArrayList<Event> parseEvent(String jsonText) {
         try {
-            restos = new ArrayList<>();
+            events = new ArrayList<>();
             JSONParser j = new JSONParser();
-            Map<String, Object> restaurantsListJson
+            Map<String, Object> eventsListJson
                     = j.parseJSON(new CharArrayReader(jsonText.toCharArray()));
 
-            List<Map<String, Object>> list = (List<Map<String, Object>>) restaurantsListJson.get("root");
+            List<Map<String, Object>> list = (List<Map<String, Object>>) eventsListJson.get("root");
             for (Map<String, Object> obj : list) {
-                Restaurant r = new Restaurant();
+                Event r = new Event();
                 float id = Float.parseFloat(obj.get("id").toString());
                 r.setId((int) id);
                 if (obj.get("name") == null) {
@@ -96,30 +92,35 @@ public class RestaurantService {
                     r.setPays(obj.get("pays").toString());
                 }
 
+                if (obj.get("date") == null) {
+                    r.setImage("null");
+                } else {
+                    r.setImage(obj.get("date").toString());
+                }
                 if (obj.get("image") == null) {
                     r.setImage("null");
                 } else {
                     r.setImage(obj.get("image").toString());
                 }
-                restos.add(r);
+                events.add(r);
             }
 
         } catch (IOException ex) {
 
         }
-        return restos;
+        return events;
     }
 
-    public ArrayList<Restaurant> getAllRestaurants() {
+    public ArrayList<Event> getAllEvents() {
         ConnectionRequest req = new ConnectionRequest();
         String url = BASE_URL;
         req.setUrl(url);
         req.setPost(false);
         req.addResponseListener(e -> {
-            restos = parseRestaurant(new String(req.getResponseData()));
-        }
+                    events = parseEvent(new String(req.getResponseData()));
+                }
         );
         NetworkManager.getInstance().addToQueueAndWait(req);
-        return restos;
+        return events;
     }
 }

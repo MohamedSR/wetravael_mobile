@@ -3,6 +3,8 @@ package com.Pidev.Restaurant;
 import com.Pidev.GUI.Home;
 import com.Pidev.Restaurant.Entities.Restaurant;
 import com.Pidev.Restaurant.Services.RestaurantService;
+import com.Pidev.Restaurant.Entities.Event;
+import com.Pidev.Restaurant.Services.EventService;
 import com.Pidev.Restaurant.Utils.Strings;
 import com.codename1.components.ImageViewer;
 import static com.codename1.ui.CN.*;
@@ -35,6 +37,8 @@ public class MyApplication {
     private Resources theme;
     private String filePath;
     ArrayList<Restaurant> restos = new ArrayList<>();
+    ArrayList<Event> events = new ArrayList<>();
+
 
     public void init(Object context) {
         // use two network threads instead of one
@@ -47,8 +51,12 @@ public class MyApplication {
 
         // Pro only feature
         Log.bindCrashProtection(true);
-        RestaurantService rs = RestaurantService.getInstance();
+       RestaurantService rs = RestaurantService.getInstance();
+        EventService rse = EventService.getInstance();
+
         restos = rs.getAllRestaurants();
+        events = rse.getAllEvents();
+
 
         addNetworkErrorListener(err -> {
             // prevent the event from propagating

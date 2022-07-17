@@ -6,6 +6,8 @@ package com.Pidev.GUI;
 
 import com.Pidev.GUI.Restaurant.AddRestaurantForm;
 import com.Pidev.GUI.Restaurant.ListRestaurantForm;
+import com.Pidev.GUI.Event.AddEventForm;
+import com.Pidev.GUI.Event.ListEventForm;
 import com.codename1.ui.Button;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
@@ -25,6 +27,11 @@ public class Home extends Form {
         setLayout(BoxLayout.y());
         Button btnRestaurant = new Button("Restaurants");
         btnRestaurant.addActionListener(e-> new ListRestaurantForm(current).show());
+        Button btnEvent = new Button("Evenements");
+        btnEvent.addActionListener(e-> new ListEventForm(current).show());
+        System.out.println("redirectedddd");
         add(btnRestaurant);
+        add(btnEvent);
+
     }
 }
